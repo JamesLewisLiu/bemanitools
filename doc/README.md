@@ -13,6 +13,7 @@ Table of contents:
   - [Tools](tools/README.md): Documentation for additional user and development tooling
 - Game hooks
   - [ddrhook](ddrhook/README.md): Documentation relevant to `ddrhook` implementations
+  - [gfdmhook](gfdmhook/README.md): Documentation relevant to `gfdmhook` implementations
   - [iidxhook](iidxhook/README.md): Documentation relevant to `iidxhook` implementations
   - [jbhook](jbhook/README.md): Documentation relevant to `jbhook` implementations
   - [popnhook](popnhook/README.md): Documentation relevant to `popnhook` implementations

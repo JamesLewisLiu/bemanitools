@@ -137,6 +137,7 @@ include src/main/ezusb2-popn-shim/Module.mk
 include src/main/ezusb2-tool/Module.mk
 include src/main/ezusb2/Module.mk
 include src/main/geninput/Module.mk
+include src/main/gfdmhook1/Module.mk
 include src/main/hook/Module.mk
 include src/main/hooklib/Module.mk
 include src/main/iidx-bio2-exit-hook/Module.mk
@@ -260,6 +261,18 @@ $(zipdir)/tools-x64.zip: \
 		build/bin/indep-64/nvgpu.exe \
 		build/bin/indep-64/d3d9-frame-graph-hook.dll \
 		build/bin/indep-64/d3d9-monitor-check.exe \
+		| $(zipdir)/
+	$(V)echo ... $@
+	$(V)zip -j $@ $^
+
+$(zipdir)/gfdm-v4.zip: \
+		build/bin/indep-32/gfdmhook1.dll \
+		build/bin/indep-32/inject.exe \
+		dist/gfdm/gamestart-v4-gf.bat \
+		dist/gfdm/gamestart-v4-dm.bat \
+		dist/gfdm/gfdm-v4.conf \
+		dist/gfdm/gfdm-v4-gf.conf \
+		dist/gfdm/gfdm-v4-dm.conf \
 		| $(zipdir)/
 	$(V)echo ... $@
 	$(V)zip -j $@ $^
@@ -859,6 +872,7 @@ $(BUILDDIR)/bemanitools.zip: \
 		$(zipdir)/ddr-hwio-x86.zip \
 		$(zipdir)/ddr-hwio-x64.zip \
 		$(zipdir)/doc.zip \
+		$(zipdir)/gfdm-v4.zip \
 		$(zipdir)/iidx-09-to-12.zip \
 		$(zipdir)/iidx-13.zip \
 		$(zipdir)/iidx-14-to-17.zip \

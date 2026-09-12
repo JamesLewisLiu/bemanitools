@@ -82,6 +82,8 @@ The following games are supported with their corresponding hook-libraries.
   - jubeat qubell (`jb-05-to-07.zip`): [jbhook3](doc/jbhook/jbhook3.md)
   - jubeat clan (`jb-08.zip`): [jbhook3](doc/jbhook/jbhook3.md)
   - jubeat festo (`jb-08.zip`): [jbhook3](doc/jbhook/jbhook3.md)
+- [Guitar Freaks & DrumMania](doc/gfdmhook/README.md)
+  - Guitar Freaks & DrumMania V4 (`gfdm-v4.zip`): [gfdmhook1](doc/gfdmhook/README.md)
 - [pop'n music](doc/popnhook/README.md)
   - pop'n music 15 ADVENTURE (`popn-15-to-18.zip`) using [popnhook1](doc/popnhook/popnhook1.md)
   - pop'n music 16 PARTY♪ (`popn-15-to-18.zip`) using [popnhook1](doc/popnhook/popnhook1.md)
