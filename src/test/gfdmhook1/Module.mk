@@ -19,3 +19,13 @@ src_gfdm-debug-test := debug-test.c
 testexes += gfdm-effect-test
 srcdir_gfdm-effect-test := src/test/gfdmhook1
 src_gfdm-effect-test := effect-test.c
+
+testexes += gfdm-cabinet-test
+srcdir_gfdm-cabinet-test := src/test/gfdmhook1
+src_gfdm-cabinet-test := cabinet-test.c
+libs_gfdm-cabinet-test := p3io security util
+
+testexes += gfdm-service-test
+srcdir_gfdm-service-test := src/test/gfdmhook1
+src_gfdm-service-test := service-test.c
+libs_gfdm-service-test := cconfig security util

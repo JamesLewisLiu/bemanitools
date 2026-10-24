@@ -269,20 +269,13 @@ $(zipdir)/tools-x64.zip: \
 
 $(zipdir)/gfdm-v%.zip: \
 	build/bin/avs2_1002-32/gfdmhook1.dll \
-		build/bin/indep-32/config.exe \
-		build/bin/indep-32/eamio.dll \
-		build/bin/indep-32/geninput.dll \
 		build/bin/indep-32/inject.exe \
-		dist/gfdm/config-gf.bat \
-		dist/gfdm/config-dm.bat \
 		dist/gfdm/gamestart-v%-gf.bat \
 		dist/gfdm/gamestart-v%-dm.bat \
-		dist/gfdm/gfdm-v%-boot.xml \
-		dist/gfdm/gfdm-v%-ea3-ident-gf.xml \
-		dist/gfdm/gfdm-v%-ea3-ident-dm.xml \
 		dist/gfdm/gfdm-v%.conf \
 		dist/gfdm/gfdm-v%-gf.conf \
 		dist/gfdm/gfdm-v%-dm.conf \
+		doc/gfdmhook/README-original-cabinet.md \
 		| $(zipdir)/
 	$(V)echo ... $@
 	$(V)zip -j $@ $^

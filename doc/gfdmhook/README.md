@@ -1,5 +1,9 @@
 # gfdmhook1
 
+This branch targets original cabinets. See [the original cabinet guide](README-original-cabinet.md)
+for its configuration and validation limits. The text below documents the parent
+`gfdm` PC emulation branch and does not describe this branch's active hook chain.
+
 `gfdmhook1` provides a shared BT5 startup path for the 32-bit classic Guitar
 Freaks & DrumMania V4-V8 runtimes. Inject it into the matching `gdvN.exe`;
 the original `boot.dll` still starts AVS, with P3IO emulated through BT5 IO.

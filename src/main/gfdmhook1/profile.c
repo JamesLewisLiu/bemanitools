@@ -4,7 +4,8 @@
 #include "gfdmhook1/profile.h"
 
 static const struct gfdm_profile profiles[] = {
-    {4, "gdv4.exe", "GCG33JAA", "GCG32JAA", true, &security_rp_sign_key_black_gfdmv4},
+    /* Native V4 checks GENTAKAH; the PC branch bypassed that check. */
+    {4, "gdv4.exe", "GCG33JAA", "GCG32JAA", true, &security_rp_sign_key_black_python2},
     {5, "gdv5.exe", "GCH33JAA", "GCH32JAA", false, &security_rp_sign_key_black_gfdmv4},
     {6, "gdv6.exe", "GCI33JAA", "GCI32JAA", false, &security_rp_sign_key_black_gfdmv4},
     {7, "gdv7.exe", "GCJ33JBA", "GCJ32JBA", false, &security_rp_sign_key_black_gfdmv4},

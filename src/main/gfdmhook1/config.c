@@ -1,4 +1,5 @@
 #include <string.h>
+#include <stdio.h>
 
 #include "cconfig/cconfig-util.h"
 #include "gfdmhook1/config.h"
@@ -9,14 +10,6 @@
 #define PCBID_KEY "eamuse.pcbid"
 #define EAMID_KEY "eamuse.eamid"
 #define MCODE_KEY "security.mcode"
-#define KEYBOARD_KEY "input.keyboard"
-#define FRAME_RATE_LIMIT_KEY "gfx.frame_rate_limit"
-#define FORCED_REFRESH_RATE_KEY "gfx.forced_refresh_rate"
-
-static const struct net_addr default_server = {
-    .type = NET_ADDR_TYPE_HOSTNAME,
-    .hostname = {.host = NET_LOCALHOST_NAME, .port = 80},
-};
 
 void gfdmhook1_config_init(struct cconfig *config, const char *default_mcode)
 {
@@ -25,7 +18,7 @@ void gfdmhook1_config_init(struct cconfig *config, const char *default_mcode)
         SERVER_KEY,
         "localhost:80",
         "e-amusement server URL or host:port");
-    hooklib_config_adapter_init(config);
+
     cconfig_util_set_data(
         config,
         PCBID_KEY,
@@ -43,47 +36,40 @@ void gfdmhook1_config_init(struct cconfig *config, const char *default_mcode)
         MCODE_KEY,
         default_mcode,
         "security mcode (8 characters; default follows version and GF/DM mode)");
-    cconfig_util_set_bool(
-        config,
-        KEYBOARD_KEY,
-        false,
-        "enable the default keyboard-to-panel mapping");
-    cconfig_util_set_float(
-        config,
-        FRAME_RATE_LIMIT_KEY,
-        60.0,
-        "software frame-rate limit in Hz (0 disables the limiter)");
-    cconfig_util_set_int(
-        config,
-        FORCED_REFRESH_RATE_KEY,
-        60,
-        "fullscreen refresh rate in Hz (0 disables the override)");
+    cconfig_util_set_bool(config, "security.black", false,
+                          "emulate black roundplug; false uses physical plug");
+    cconfig_util_set_bool(config, "security.white", false,
+                          "emulate white roundplug; false uses physical plug");
 }
 
 void gfdmhook1_config_get(
     struct gfdmhook1_config *out, struct cconfig *config,
     const char *default_mcode)
 {
-    char server[1024];
-    char mcode[sizeof(struct security_mcode) + 1];
+    char server[1025];
+    char mcode[sizeof(struct security_mcode) + 2];
 
     memset(out, 0, sizeof(*out));
-    out->server = default_server;
-    memset(&out->adapter, 0, sizeof(out->adapter));
     out->pcbid = security_id_default;
     out->eamid = security_id_default;
-    out->keyboard = false;
-    out->frame_rate_limit = 60.0f;
-    out->forced_refresh_rate = 60;
-
-    if (cconfig_util_get_str(config, SERVER_KEY, server, sizeof(server), "localhost:80")) {
-        if (!net_str_parse(server, &out->server)) {
-            log_warning("Invalid %s, using localhost:80", SERVER_KEY);
-            out->server = default_server;
-        }
+    if (!cconfig_util_get_str(config, SERVER_KEY, server, sizeof(server) - 1, "localhost:80")) {
+        log_fatal("Cannot read Service URL");
     }
-
-    hooklib_config_adapter_get(&out->adapter, config);
+    if (strncmp(server, "http://", 7) && strncmp(server, "https://", 8)) {
+        if (strstr(server, "://") || strlen(server) + 8 >= sizeof(out->server)) {
+            log_fatal("Invalid or too long Service URL");
+        }
+        snprintf(out->server, sizeof(out->server), "http://%s/", server);
+    } else {
+        if (strlen(server) >= sizeof(out->server)) log_fatal("Service URL exceeds EA3 limit");
+        strcpy(out->server, server);
+    }
+    const char *host = strstr(out->server, "://") + 3;
+    if (*host == '\0' || *host == '/' || strpbrk(host, " \t\r\n")) {
+        log_fatal("Invalid Service URL host");
+    }
+    cconfig_util_get_bool(config, "security.black", &out->black, false);
+    cconfig_util_get_bool(config, "security.white", &out->white, false);
 
     cconfig_util_get_data(
         config, PCBID_KEY, (uint8_t *) &out->pcbid, sizeof(out->pcbid),
@@ -100,21 +86,10 @@ void gfdmhook1_config_get(
     }
 
     if (!cconfig_util_get_str(
-            config, MCODE_KEY, mcode, sizeof(mcode), default_mcode) ||
+            config, MCODE_KEY, mcode, sizeof(mcode) - 1, default_mcode) ||
         !security_mcode_parse(mcode, &out->mcode)) {
         log_warning("Invalid %s, using %s", MCODE_KEY, default_mcode);
         security_mcode_parse(default_mcode, &out->mcode);
     }
 
-    cconfig_util_get_bool(config, KEYBOARD_KEY, &out->keyboard, false);
-    if (!cconfig_util_get_float(
-            config, FRAME_RATE_LIMIT_KEY, &out->frame_rate_limit, 60.0)) {
-        log_warning("Invalid %s, using 60 Hz", FRAME_RATE_LIMIT_KEY);
-        out->frame_rate_limit = 60.0f;
-    }
-    if (!cconfig_util_get_int(
-            config, FORCED_REFRESH_RATE_KEY, &out->forced_refresh_rate, 60)) {
-        log_warning("Invalid %s, using 60 Hz", FORCED_REFRESH_RATE_KEY);
-        out->forced_refresh_rate = 60;
-    }
 }

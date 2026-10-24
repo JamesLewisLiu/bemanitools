@@ -2,31 +2,13 @@ avsdlls += gfdmhook1
 
 deplibs_gfdmhook1 := avs
 
-ldflags_gfdmhook1 := \
-    -ladvapi32 \
-    -liphlpapi \
-    -luser32 \
-    -lws2_32 \
+ldflags_gfdmhook1 := -luser32 -ladvapi32
 
-libs_gfdmhook1 := \
-    cconfig \
-    geninput \
-    hook \
-    hooklib \
-    iidxhook-util \
-    p3io \
-    p3ioemu \
-    security \
-    util \
+libs_gfdmhook1 := cconfig hook p3io security util
 
 src_gfdmhook1 := \
-    bios.c \
-    coin.c \
-    codec.c \
+    cabinet.c \
     config.c \
-    debug.c \
-    effect.c \
     dllmain.c \
     network.c \
     profile.c \
-    storage.c \

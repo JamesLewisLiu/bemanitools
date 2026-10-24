@@ -24,7 +24,7 @@ int main(void)
         assert(strcmp(profile->mcode_dm, dm[i]) == 0);
         assert(profile->movie_v4_guard == (i == 0));
         assert(memcmp(profile->black_sign_key->data,
-                      i == 4 ? "SHAMOSAN" : "UDONHRKI", 8) == 0);
+                      i == 0 ? "GENTAKAH" : i == 4 ? "SHAMOSAN" : "UDONHRKI", 8) == 0);
         snprintf(path, sizeof(path), "I:/GFDMV%u/binbt5/gdv%u.exe", i + 4, i + 4);
         assert(gfdm_profile_find(path) == profile);
         assert(gfdm_profile_find(profile->executable) == profile);
